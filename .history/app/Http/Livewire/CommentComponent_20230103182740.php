@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Http\Livewire;
+
+use Livewire\Component;
+
+class CommentComponent extends Component
+{
+    public $cmtContent;
+    public function comment(){
+        // if($this->cmtContent) dd($this->cmtContent);
+    }
+    public function render()
+    {
+        if($this->cmtContent) dd($this->cmtContent);
+        $id = session()->get('idTin');
+        $comment = \DB::table('comment')
+        ->join('users','users.id','=','id_user')
+        ->select('comment.*','name','id_group','email','avatar')
+        ->where('id_tin',$id)
+        ->orderByDesc('comment.created_at')->get();
+        return view('livewire.comment-component',compact('comment'));
+    }
+}
